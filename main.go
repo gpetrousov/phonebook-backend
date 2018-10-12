@@ -23,10 +23,10 @@ const COLLECTION = "people"
 // CONNECTIONSTRING DB connection string
 const CONNECTIONSTRING = "mongodb://localhost:27017"
 
-var people []models.Person
-
 func init() {
 	// Populates database with dummy data
+
+	var people []models.Person
 
 	client, err := mongo.NewClient(CONNECTIONSTRING)
 	if err != nil {
@@ -58,7 +58,7 @@ func init() {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/people", handlers.GetPeopleEndpoint).Methods("GET")
+	router.HandleFunc("/people", handlers.GetAllPeopleEndpoint).Methods("GET")
 	router.HandleFunc("/people/{id}", handlers.GetPersonEndpoint).Methods("GET")
 	router.HandleFunc("/people", handlers.CreatePersonEndpoint).Methods("POST")
 	router.HandleFunc("/people/{id}", handlers.DeletePersonEndpoint).Methods("DELETE")
