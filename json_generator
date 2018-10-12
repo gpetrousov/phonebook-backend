@@ -1,0 +1,17 @@
+https://www.json-generator.com/
+
+[
+  '{{repeat(5, 7)}}',
+  {
+    _id: '{{objectId()}}',
+    firstname: '{{firstName()}}',
+    lastname: '{{surname()}}',
+    contactinfo: {
+        city: '{{city()}}',
+      zipcode: '{{integer(100, 10000)}}',
+        phone: '+1 {{phone()}}'
+    }
+  }
+]
+
+https://github.com/mycodesmells/mongo-go-api
