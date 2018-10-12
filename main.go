@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"phonebook-backend/handlers"
+	"phonebook-backend/models"
 
 	"github.com/gorilla/mux"
 	"github.com/mongodb/mongo-go-driver/mongo"
@@ -22,7 +23,7 @@ const COLLECTION = "people"
 // CONNECTIONSTRING DB connection string
 const CONNECTIONSTRING = "mongodb://localhost:27017"
 
-// var people []models.Person
+var people []models.Person
 
 func init() {
 	// Populates database with dummy data
