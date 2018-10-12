@@ -8,6 +8,6 @@ type Person struct {
 }
 type Contactinfo struct {
 	City    string `json:"city,omitempty"`
-	Zipcode string `json:"Zipcode,omitempty"`
+	Zipcode string `json:"zipcode,omitempty"`
 	Phone   string `json:"phone,omitempty"`
 }
