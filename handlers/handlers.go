@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"phonebook-backend/dao"
 	"phonebook-backend/models"
 
 	"github.com/gorilla/mux"
@@ -13,7 +14,8 @@ var people []models.Person
 // GetPersonEndpoint gets a person
 func GetPersonEndpoint(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	for _, p := range people {
+	payload := dao.GetAllPassengers()
+	for _, p := range payload {
 		if p.ID == params["id"] {
 			json.NewEncoder(w).Encode(p)
 			return
@@ -22,9 +24,10 @@ func GetPersonEndpoint(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Person not found")
 }
 
-// GetPeopleEndpoint gets all lpeople
-func GetPeopleEndpoint(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(people)
+// GetAllPeopleEndpoint gets all lpeople
+func GetAllPeopleEndpoint(w http.ResponseWriter, r *http.Request) {
+	payload := dao.GetAllPassengers()
+	json.NewEncoder(w).Encode(payload)
 }
 
 // CreatePersonEndpoint creta a person
