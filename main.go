@@ -3,18 +3,26 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
-	"phonebook-backend/models"
+	"net/http"
+	"phonebook-backend/handlers"
 
+	"github.com/gorilla/mux"
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
+// DBNAME Database name
 const DBNAME = "phonebook"
+
+// COLLECTION Collection name
 const COLLECTION = "people"
+
+// CONNECTIONSTRING DB connection string
 const CONNECTIONSTRING = "mongodb://localhost:27017"
 
-var people []models.Person
+// var people []models.Person
 
 func init() {
 	// Populates database with dummy data
@@ -48,5 +56,12 @@ func init() {
 }
 
 func main() {
-
+	router := mux.NewRouter()
+	router.HandleFunc("/people", handlers.GetPeopleEndpoint).Methods("GET")
+	router.HandleFunc("/people/{id}", handlers.GetPersonEndpoint).Methods("GET")
+	router.HandleFunc("/people", handlers.CreatePersonEndpoint).Methods("POST")
+	router.HandleFunc("/people/{id}", handlers.DeletePersonEndpoint).Methods("DELETE")
+	router.HandleFunc("/people/{id}", handlers.UpdatePersonEndpoint).Methods("PUT")
+	fmt.Println("Starting server on port 8000...")
+	log.Fatal(http.ListenAndServe(":8000", router))
 }
