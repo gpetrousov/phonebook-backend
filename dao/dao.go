@@ -8,18 +8,17 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-// PersonDAO allows us to create DAO element
-type PersonDAO struct {
-	Server     string
-	Database   string
-	Collection string
-}
+// CONNECTIONSTRING DB connection string
+const CONNECTIONSTRING = "mongodb://localhost:27017"
+
+// DBNAME Database name
+const DBNAME = "phonebook"
 
 var db *mongo.Database
 
 // Connect establish a connection to database
-func (c *PersonDAO) Connect() {
-	client, err := mongo.NewClient("mongodb://mongo:27017")
+func init() {
+	client, err := mongo.NewClient(CONNECTIONSTRING)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,11 +27,11 @@ func (c *PersonDAO) Connect() {
 		log.Fatal(err)
 	}
 	// Collection types can be used to access the database
-	db = client.Database("baz")
+	db = client.Database(DBNAME)
 }
 
 // InsertManyValues inserts many items from byte slice
-func (c *PersonDAO) InsertManyValues(passengers []models.Person) {
+func InsertManyValues(passengers []models.Person) {
 	var ppl []interface{}
 	for _, p := range passengers {
 		ppl = append(ppl, p)
@@ -44,8 +43,8 @@ func (c *PersonDAO) InsertManyValues(passengers []models.Person) {
 }
 
 // GetAllPassengers returns all passengers from DB
-func (c *PersonDAO) GetAllPassengers() []models.Person {
-	cur, err := db.Collection("titanic").Find(context.Background(), nil, nil)
+func GetAllPassengers() []models.Person {
+	cur, err := db.Collection("people").Find(context.Background(), nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +66,7 @@ func (c *PersonDAO) GetAllPassengers() []models.Person {
 }
 
 // DeletePassenger deletes an existing passenger
-func (c *PersonDAO) DeletePassenger(passenger models.Person) error {
+func DeletePassenger(passenger models.Person) error {
 	_, err := db.Collection("titanic").DeleteMany(context.Background(), passenger, nil)
 	return err
 }
