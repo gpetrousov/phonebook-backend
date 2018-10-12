@@ -1,6 +1,6 @@
 [
   {
-    "_id": "5bbf590a4bfd65789b9512ce",
+    "id": "5bbf590a4bfd65789b9512ce",
     "firstname": "Church",
     "lastname": "Mckinney",
     "contactinfo": {
@@ -10,7 +10,7 @@
     }
   },
   {
-    "_id": "5bbf590a42baed9048a7dc5c",
+    "id": "5bbf590a42baed9048a7dc5c",
     "firstname": "Katrina",
     "lastname": "Dotson",
     "contactinfo": {
@@ -20,7 +20,7 @@
     }
   },
   {
-    "_id": "5bbf590a17b1905e30735778",
+    "id": "5bbf590a17b1905e30735778",
     "firstname": "Romero",
     "lastname": "Kirk",
     "contactinfo": {
@@ -30,7 +30,7 @@
     }
   },
   {
-    "_id": "5bbf590a270a039e03ebc49d",
+    "id": "5bbf590a270a039e03ebc49d",
     "firstname": "Jana",
     "lastname": "Hess",
     "contactinfo": {
@@ -40,7 +40,7 @@
     }
   },
   {
-    "_id": "5bbf590a43b70a45098d5a38",
+    "id": "5bbf590a43b70a45098d5a38",
     "firstname": "Jennings",
     "lastname": "Little",
     "contactinfo": {
@@ -50,7 +50,7 @@
     }
   },
   {
-    "_id": "5bbf590afa26874dc83886a1",
+    "id": "5bbf590afa26874dc83886a1",
     "firstname": "Buckner",
     "lastname": "Nelson",
     "contactinfo": {
