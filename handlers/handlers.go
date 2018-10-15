@@ -34,7 +34,7 @@ func GetAllPeopleEndpoint(w http.ResponseWriter, r *http.Request) {
 func CreatePersonEndpoint(w http.ResponseWriter, r *http.Request) {
 	var person models.Person
 	_ = json.NewDecoder(r.Body).Decode(&person)
-	people = append(people, person)
+	dao.InsertOneValue(person)
 	json.NewEncoder(w).Encode(person)
 }
 

@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"phonebook-backend/models"
 
@@ -13,6 +14,9 @@ const CONNECTIONSTRING = "mongodb://localhost:27017"
 
 // DBNAME Database name
 const DBNAME = "phonebook"
+
+// COLLNAME Collection name
+const COLLNAME = "people"
 
 var db *mongo.Database
 
@@ -31,12 +35,21 @@ func init() {
 }
 
 // InsertManyValues inserts many items from byte slice
-func InsertManyValues(passengers []models.Person) {
+func InsertManyValues(people []models.Person) {
 	var ppl []interface{}
-	for _, p := range passengers {
+	for _, p := range people {
 		ppl = append(ppl, p)
 	}
-	_, err := db.Collection("titanic").InsertMany(context.Background(), ppl)
+	_, err := db.Collection(COLLNAME).InsertMany(context.Background(), ppl)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// InsertOneValue inserts one item from Person model
+func InsertOneValue(person models.Person) {
+	fmt.Println(person)
+	_, err := db.Collection(COLLNAME).InsertOne(context.Background(), person)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,7 +57,7 @@ func InsertManyValues(passengers []models.Person) {
 
 // GetAllPassengers returns all passengers from DB
 func GetAllPassengers() []models.Person {
-	cur, err := db.Collection("people").Find(context.Background(), nil, nil)
+	cur, err := db.Collection(COLLNAME).Find(context.Background(), nil, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,6 +80,6 @@ func GetAllPassengers() []models.Person {
 
 // DeletePassenger deletes an existing passenger
 func DeletePassenger(passenger models.Person) error {
-	_, err := db.Collection("titanic").DeleteMany(context.Background(), passenger, nil)
+	_, err := db.Collection(COLLNAME).DeleteMany(context.Background(), passenger, nil)
 	return err
 }
