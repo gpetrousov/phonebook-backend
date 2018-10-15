@@ -61,7 +61,7 @@ func main() {
 	router.HandleFunc("/people", handlers.GetAllPeopleEndpoint).Methods("GET")
 	router.HandleFunc("/people/{id}", handlers.GetPersonEndpoint).Methods("GET")
 	router.HandleFunc("/people", handlers.CreatePersonEndpoint).Methods("POST")
-	router.HandleFunc("/people/{id}", handlers.DeletePersonEndpoint).Methods("DELETE")
+	router.HandleFunc("/people", handlers.DeletePersonEndpoint).Methods("DELETE")
 	router.HandleFunc("/people/{id}", handlers.UpdatePersonEndpoint).Methods("PUT")
 	fmt.Println("Starting server on port 8000...")
 	log.Fatal(http.ListenAndServe(":8000", router))

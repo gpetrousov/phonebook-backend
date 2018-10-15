@@ -78,8 +78,10 @@ func GetAllPassengers() []models.Person {
 	return elements
 }
 
-// DeletePassenger deletes an existing passenger
-func DeletePassenger(passenger models.Person) error {
-	_, err := db.Collection(COLLNAME).DeleteMany(context.Background(), passenger, nil)
-	return err
+// DeletePerson deletes an existing person
+func DeletePerson(person models.Person) {
+	_, err := db.Collection(COLLNAME).DeleteOne(context.Background(), person, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
