@@ -55,8 +55,8 @@ func InsertOneValue(person models.Person) {
 	}
 }
 
-// GetAllPassengers returns all passengers from DB
-func GetAllPassengers() []models.Person {
+// GetAllPeople returns all people from DB
+func GetAllPeople() []models.Person {
 	cur, err := db.Collection(COLLNAME).Find(context.Background(), nil, nil)
 	if err != nil {
 		log.Fatal(err)

@@ -14,7 +14,7 @@ var people []models.Person
 // GetPersonEndpoint gets a person
 func GetPersonEndpoint(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	payload := dao.GetAllPassengers()
+	payload := dao.GetAllPeople()
 	for _, p := range payload {
 		if p.ID == params["id"] {
 			json.NewEncoder(w).Encode(p)
@@ -26,7 +26,7 @@ func GetPersonEndpoint(w http.ResponseWriter, r *http.Request) {
 
 // GetAllPeopleEndpoint gets all lpeople
 func GetAllPeopleEndpoint(w http.ResponseWriter, r *http.Request) {
-	payload := dao.GetAllPassengers()
+	payload := dao.GetAllPeople()
 	json.NewEncoder(w).Encode(payload)
 }
 
