@@ -47,14 +47,7 @@ func DeletePersonEndpoint(w http.ResponseWriter, r *http.Request) {
 
 // UpdatePersonEndpoint updates a person
 func UpdatePersonEndpoint(w http.ResponseWriter, r *http.Request) {
-	var person models.Person
-	_ = json.NewDecoder(r.Body).Decode(&person)
-	params := mux.Vars(r)
-	for i, p := range people {
-		if p.ID == params["id"] {
-			people[i] = person
-			json.NewEncoder(w).Encode(person)
-			break
-		}
-	}
+	var people []models.Person
+	_ = json.NewDecoder(r.Body).Decode(&people)
+	dao.UpdatePerson(people)
 }

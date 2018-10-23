@@ -6,6 +6,7 @@ import (
 	"log"
 	"phonebook-backend/models"
 
+	"github.com/mongodb/mongo-go-driver/bson"
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
@@ -84,4 +85,23 @@ func DeletePerson(person models.Person) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// UpdatePerson updates an existing person
+func UpdatePerson(people []models.Person) {
+
+	doc := db.Collection(COLLNAME).FindOneAndUpdate(
+		context.Background(),
+		bson.NewDocument(
+			bson.EC.String("firstname", "Ioannis"),
+		),
+		bson.NewDocument(
+			bson.EC.SubDocumentFromElements("$set",
+				bson.EC.String("firstname", "Nikos"),
+			)),
+		nil)
+	fmt.Println(doc)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 }
