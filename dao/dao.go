@@ -104,7 +104,4 @@ func UpdatePerson(person models.Person, personID string) {
 		),
 		nil)
 	fmt.Println(doc)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 }
