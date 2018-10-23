@@ -89,7 +89,6 @@ func DeletePerson(person models.Person) {
 
 // UpdatePerson updates an existing person
 func UpdatePerson(person models.Person, personID string) {
-	fmt.Println(person.City)
 	doc := db.Collection(COLLNAME).FindOneAndUpdate(
 		context.Background(),
 		bson.NewDocument(
