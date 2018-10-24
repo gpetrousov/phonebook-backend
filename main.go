@@ -1,84 +1,68 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"phonebook-backend/handlers"
+	"phonebook-backend/models"
 
 	"github.com/gorilla/mux"
+	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-type Person struct {
-	ID          string `json:"id,omitempty"`
-	Firstname   string `json:"firstname,omitempty"`
-	Lastname    string `json:"lastname,omitempty"`
-	Contactinfo `json:"contactinfo,omitempty"`
-}
-type Contactinfo struct {
-	City    string `json:"city,omitempty"`
-	Zipcode string `json:"Zipcode,omitempty"`
-	Phone   string `json:"phone,omitempty"`
-}
+// DBNAME Database name
+const DBNAME = "phonebook"
 
-var people []Person
+// COLLECTION Collection name
+const COLLECTION = "people"
 
-func GetPersonEndpoint(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+// CONNECTIONSTRING DB connection string
+const CONNECTIONSTRING = "mongodb://localhost:27017"
+
+func init() {
+	// Populates database with dummy data
+
+	var people []models.Person
+
+	client, err := mongo.NewClient(CONNECTIONSTRING)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = client.Connect(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	db := client.Database(DBNAME)
+
+	// Load values from JSON file to model
+	byteValues, err := ioutil.ReadFile("person_data.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(byteValues, &people)
+
+	// Insert people into DB
+	var ppl []interface{}
 	for _, p := range people {
-		if p.ID == params["id"] {
-			json.NewEncoder(w).Encode(p)
-			return
-		}
+		ppl = append(ppl, p)
 	}
-	json.NewEncoder(w).Encode("Person not found")
-}
-
-func GetPeopleEndpoint(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(people)
-}
-
-func CreatePersonEndpoint(w http.ResponseWriter, r *http.Request) {
-	var person Person
-	_ = json.NewDecoder(r.Body).Decode(&person)
-	people = append(people, person)
-	json.NewEncoder(w).Encode(person)
-}
-
-func DeletePersonEndpoint(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	for i, p := range people {
-		if p.ID == params["id"] {
-			copy(people[i:], people[i+1:])
-			people = people[:len(people)-1]
-			break
-		}
-	}
-	json.NewEncoder(w).Encode(people)
-}
-
-func UpdatePersonEndpoint(w http.ResponseWriter, r *http.Request) {
-	var person Person
-	_ = json.NewDecoder(r.Body).Decode(&person)
-	params := mux.Vars(r)
-	for i, p := range people {
-		if p.ID == params["id"] {
-			people[i] = person
-			json.NewEncoder(w).Encode(person)
-			break
-		}
+	_, err = db.Collection(COLLECTION).InsertMany(context.Background(), ppl)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
 func main() {
 	router := mux.NewRouter()
-	people = append(people, Person{ID: "1", Firstname: "Bruce", Lastname: "Wayne", Contactinfo: Contactinfo{City: "Gotham", Zipcode: "735", Phone: "012345678"}})
-	people = append(people, Person{ID: "2", Firstname: "Clark", Lastname: "Kent", Contactinfo: Contactinfo{City: "Metropolis", Zipcode: "62960", Phone: "9876543210"}})
-	router.HandleFunc("/people", GetPeopleEndpoint).Methods("GET")
-	router.HandleFunc("/people/{id}", GetPersonEndpoint).Methods("GET")
-	router.HandleFunc("/people", CreatePersonEndpoint).Methods("POST")
-	router.HandleFunc("/people/{id}", DeletePersonEndpoint).Methods("DELETE")
-	router.HandleFunc("/people/{id}", UpdatePersonEndpoint).Methods("PUT")
+	router.HandleFunc("/people", handlers.GetAllPeopleEndpoint).Methods("GET")
+	router.HandleFunc("/people/{id}", handlers.GetPersonEndpoint).Methods("GET")
+	router.HandleFunc("/people", handlers.CreatePersonEndpoint).Methods("POST")
+	router.HandleFunc("/people", handlers.DeletePersonEndpoint).Methods("DELETE")
+	router.HandleFunc("/people/{id}", handlers.UpdatePersonEndpoint).Methods("PUT")
 	fmt.Println("Starting server on port 8000...")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
